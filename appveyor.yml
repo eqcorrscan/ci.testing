@@ -43,7 +43,7 @@ install:
   - "pip install pyimgur"
   - "mkdir pyasdf && cd pyasdf"
   - "git init"
-  - "git remote add -f origin git@github.com:SeismicData/pyasdf.git"
+  - "git remote add -f origin https://github.com/SeismicData/pyasdf.git"
   - "git config core.sparsecheckout true"
   - "echo setup.py >> .git/info/sparse-checkout"
   - "echo README.md >> .git/info/sparse-checkout"
