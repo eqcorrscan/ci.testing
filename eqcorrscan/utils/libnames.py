@@ -50,8 +50,8 @@ def _load_cdll(name):
     """
     # our custom defined part of the extension file name
     libname = _get_lib_name(name)
-    libdir = os.path.join(os.path.dirname(__file__), os.pardir,
-                          'lib')
+    libdir = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                          os.pardir, 'lib'))
     libpath = os.path.join(libdir, libname)
     try:
         cdll = ctypes.CDLL(str(libpath))
