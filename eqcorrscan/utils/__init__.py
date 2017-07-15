@@ -11,8 +11,8 @@ import importlib
 import warnings
 
 
-__all__ = ['archive_read', 'catalog_to_dd', 'catalog_utils',
-           'clustering', 'despike', 'findpeaks', 'mag_calc',
+__all__ = ['archive_read', 'catalog_to_dd', 'catalog_utils', 'correlate',
+           'clustering', 'despike', 'findpeaks', 'libnames', 'mag_calc',
            'parameters', 'picker', 'plotting', 'pre_processing',
            'sac_util', 'seismo_logs', 'sfile_util', 'stacking',
            'synth_seis', 'timer', 'trigger']

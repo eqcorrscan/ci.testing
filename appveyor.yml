@@ -68,14 +68,14 @@ install:
   # list package versions
   - "conda list"
   - "%CMD_IN_ENV% python setup.py build_ext --inplace"
-  - "%CMD_IN_ENV% dumpbin.exe --dependents eqcorrscan/lib/libutils.pyd"
+  - "%CMD_IN_ENV% dumpbin.exe -dependents eqcorrscan/lib/libutils.pyd"
 
 # Not a .NET project
 build: false
 
 test_script:
   - "%CMD_IN_ENV% python setup.py develop"
-  - "%CMD_IN_ENV% python setup.py test"
+  - "%CMD_IN_ENV% python eqcorrscan/tests/correlate_test.py"
 
 after_test:
   #  - "coverage combine"
