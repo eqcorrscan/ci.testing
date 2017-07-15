@@ -50,12 +50,17 @@ else:
     IS_MSVC = False
 
 if IS_MSVC:
-    extra_args = ['/openmp', '/DFFTW_DLL']
-    extra_links = ["/DFFTW_DLL"]
-    libs = ['libfftw3-3']
-    lib_dirs = [os.path.join(os.getcwd(), 'fftw'),
-                os.path.join(sys.prefix, 'bin')]
-    inc_dirs = [os.path.join(os.getcwd(), 'fftw')]
+    # extra_args = ['/openmp', '/DFFTW_DLL']
+    extra_args = []
+    extra_links = []
+    libs = []
+    lib_dirs = []
+    inc_dirs = []
+    # extra_links = ["/DFFTW_DLL"]
+    # libs = ['libfftw3-3']
+    # lib_dirs = [os.path.join(os.getcwd(), 'fftw'),
+    #             os.path.join(sys.prefix, 'bin')]
+    # inc_dirs = [os.path.join(os.getcwd(), 'fftw')]
 else:
     extra_args = ['-fopenmp', '-ftree-vectorize', '-msse2']
     extra_links = ['-lm', '-lgomp']
@@ -109,19 +114,19 @@ scriptfiles += glob.glob('eqcorrscan/scripts/*.py')
 
 if sys.version_info.major == 2:
     if not READ_THE_DOCS:
-        install_requires = ['numpy>=1.12.0', 'obspy>=1.0.0',
+        install_requires = ['numpy>=1.12.0',
                             'matplotlib>=1.3.0', 'scipy>=0.18', 'LatLon',
                             'cython']
     else:
-        install_requires = ['numpy>=1.12.0', 'obspy>=1.0.0',
+        install_requires = ['numpy>=1.12.0',
                             'matplotlib>=1.3.0', 'LatLon']
 else:
     if not READ_THE_DOCS:
-        install_requires = ['numpy>=1.12.0', 'obspy>=1.0.0',
+        install_requires = ['numpy>=1.12.0',
                             'matplotlib>=1.3.0', 'scipy>=0.18', 'LatLon',
                             'cython']
     else:
-        install_requires = ['numpy>=1.12.0', 'obspy>=1.0.0',
+        install_requires = ['numpy>=1.12.0',
                             'matplotlib>=1.3.0', 'LatLon']
 
 if IS_MSVC:

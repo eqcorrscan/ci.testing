@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <fftw3.h>
 
 // Prototypes
 int normxcorr_fftw_1d(float *signala, int a_len, float *signalb, int b_len, float *ncc, int N);
@@ -81,7 +82,100 @@ int normxcorr_fftw_1d(float *signala, int a_len, float *signalb, int b_len,
 			  must be b_len - a_len + 1 long
 	N:        Size for fft
   */
-    printf("A hollow shell of a function\n");
+	int N2 = N / 2 + 1;
+	int i, startind;
+	double norm_sum = 0.0, sum = 0.0;
+	double mean, stdev, old_mean, new_samp, old_samp, c, var=0.0;
+	float acceptedDiff = 0.0000001;
+	double * signala_ext = (double *) calloc(N, sizeof(double));
+	double * signalb_ext = (double *) calloc(N, sizeof(double));
+	double * ccc = (double *) fftw_malloc(sizeof(double) * N);
+	fftw_complex * outa = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * N2);
+	fftw_complex * outb = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * N2);
+	fftw_complex * out = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * N2);
+
+	fftw_plan pa = fftw_plan_dft_r2c_1d(N, signala_ext, outa, FFTW_ESTIMATE);
+	fftw_plan pb = fftw_plan_dft_r2c_1d(N, signalb_ext, outb, FFTW_ESTIMATE);
+	fftw_plan px = fftw_plan_dft_c2r_1d(N, out, ccc, FFTW_ESTIMATE);
+
+	// zero padding - and flip template
+	for (i = 0; i < a_len; ++i)
+	{
+		signala_ext[i] = (double) signala[a_len - (i + 1)];
+		norm_sum += signala[i];
+	}
+	for (i = 0; i < b_len; ++i)
+	{
+		signalb_ext[i] = (double) signalb[i];
+	}
+	//  Compute ffts of template and image
+	fftw_execute(pa);
+	fftw_execute(pb);
+
+	//  Compute dot product
+	for (i = 0; i < N2; ++i)
+	{
+		out[i][0] = outa[i][0] * outb[i][0] - outa[i][1] * outb[i][1];
+		out[i][1] = outa[i][0] * outb[i][1] + outa[i][1] * outb[i][0];
+	}
+	//  Compute inverse fft
+	fftw_execute(px);
+
+	startind = a_len - 1;
+
+	//  Procedures for normalisation
+	// Compute starting mean, will update this
+	for (i=0; i < a_len; ++i){
+		sum += signalb[i];
+	}
+	mean = sum / a_len;
+
+	// Compute starting standard deviation
+	for (i=0; i < a_len; ++i){
+		var += pow(signalb[i] - mean, 2) / (a_len);
+	}
+	stdev = sqrt(var);
+
+	if (var < acceptedDiff){
+        ncc[0] = 0;
+	}
+	else {
+	    c = ((ccc[startind] / N) - norm_sum * mean) / stdev;
+	    ncc[0] = (float) c;
+	}
+	// Center and divide by length to generate scaled convolution
+	for(i = 1; i < (b_len - a_len + 1); ++i){
+	    // Need to cast to double otherwise we end up with annoying floating
+	    // point errors when the variance is massive.
+		new_samp = signalb[i + a_len - 1];
+	    old_samp = signalb[i - 1];
+		old_mean = mean;
+		mean = mean + (new_samp - old_samp) / a_len;
+		var += (new_samp - old_samp) * (new_samp - mean + old_samp - old_mean) / (a_len);
+		stdev = sqrt(var);
+		if (var > acceptedDiff){
+		    c = ((ccc[i + startind] / N) - norm_sum * mean ) / stdev;
+		    ncc[i] = (float) c;
+		}
+		else{
+		    ncc[i] = 0.0;
+		}
+	}
+	//  Clean up
+	fftw_destroy_plan(pa);
+	fftw_destroy_plan(pb);
+	fftw_destroy_plan(px);
+
+	fftw_free(out);
+	fftw_free(outa);
+	fftw_free(outb);
+	fftw_free(ccc);
+
+	fftw_cleanup();
+
+	free(signala_ext);
+	free(signalb_ext);
+
 	return 0;
 }
 
@@ -105,7 +199,63 @@ int xcorr_fftw_1d(float *signala, int a_len, float *signalb, int b_len,
 			  must be b_len - a_len + 1 long
 	N:        Size for fft
   */
-    printf("A hollow shell of a function\n");
+	int N2 = N / 2 + 1;
+	int i, startind;
+	double * signala_ext = (double *) calloc(N, sizeof(double));
+	double * signalb_ext = (double *) calloc(N, sizeof(double));
+	double * ccc = (double *) fftw_malloc(sizeof(double) * N);
+	fftw_complex * outa = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * N2);
+	fftw_complex * outb = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * N2);
+	fftw_complex * out = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * N2);
+
+	fftw_plan pa = fftw_plan_dft_r2c_1d(N, signala_ext, outa, FFTW_ESTIMATE);
+	fftw_plan pb = fftw_plan_dft_r2c_1d(N, signalb_ext, outb, FFTW_ESTIMATE);
+	fftw_plan px = fftw_plan_dft_c2r_1d(N, out, ccc, FFTW_ESTIMATE);
+
+	// zero padding - and flip template
+	for (i = 0; i < a_len; ++i)
+	{
+		signala_ext[i] = signala[a_len - (i + 1)];
+	}
+	for (i = 0; i < b_len; ++i)
+	{
+		signalb_ext[i] = signalb[i];
+	}
+	//  Compute ffts of template and image
+	fftw_execute(pa);
+	fftw_execute(pb);
+
+	//  Compute dot product
+	for (i = 0; i < N2; ++i)
+	{
+		out[i][0] = outa[i][0] * outb[i][0] - outa[i][1] * outb[i][1];
+		out[i][1] = outa[i][0] * outb[i][1] + outa[i][1] * outb[i][0];
+	}
+	//  Compute inverse fft
+	fftw_execute(px);
+
+	startind = a_len - 1;
+
+	//  Procedures for normalisation
+	ncc[0] = ccc[startind] / N;
+	// Center and divide by length to generate scaled convolution
+	for(i = 1; i < (b_len - a_len + 1); ++i){
+		ncc[i] = ccc[i + startind] / N;
+	}
+	//  Clean up
+	fftw_destroy_plan(pa);
+	fftw_destroy_plan(pb);
+	fftw_destroy_plan(px);
+
+	fftw_free(out);
+	fftw_free(outa);
+	fftw_free(outb);
+	fftw_free(ccc);
+
+	fftw_cleanup();
+
+	free(signala_ext);
+	free(signalb_ext);
 
 	return 0;
 }

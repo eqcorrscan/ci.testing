@@ -55,12 +55,12 @@ install:
   - "pip install pyimgur"
 
     # Obspy 1.0.3 conda clashes with numpy >= 1.12...(because of matplotlib 1.5.*?) install via git until 1.1.0
-  - "mkdir obspy && cd obspy && git init"
-  - "git remote add -f origin https://github.com/obspy/obspy.git"
-  - "git pull origin master"
-  - "python setup.py install"
-  - "cd .."
-  - "rm -rf obspy"
+  #  - "mkdir obspy && cd obspy && git init"
+  #  - "git remote add -f origin https://github.com/obspy/obspy.git"
+  #  - "git pull origin master"
+  #  - "python setup.py install"
+  #  - "cd .."
+  #  - "rm -rf obspy"
 
   # Install other pip dependancies
   - "pip install -U future"
