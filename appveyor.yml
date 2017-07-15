@@ -67,6 +67,7 @@ install:
   - "pip install pytest pytest-pep8 pytest-cov pytest-xdist codecov"
   # list package versions
   - "conda list"
+  - "cp misc/appveyor/fftw3.h fftw/fftw3.h"
   - "%CMD_IN_ENV% python setup.py build_ext --inplace"
   - "%CMD_IN_ENV% dumpbin.exe -dependents eqcorrscan/lib/libutils.pyd"
 

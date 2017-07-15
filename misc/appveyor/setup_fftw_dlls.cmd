@@ -15,7 +15,6 @@ IF %PYTHON_ARCH% == 64 (
 ECHO Extracting DLLs from %FFTW_DLL_FILENAME%
 call 7z.exe e %FFTW_DLL_FILENAME% -offtw *.dll
 call 7z.exe e %FFTW_DLL_FILENAME% -offtw *.def
-call 7z.exe e %FFTW_DLL_FILENAME% -offtw *.h
 ECHO Generating def files
 call lib /machine:%MACHINE% /def:fftw\libfftw3-3.def
 call lib /machine:%MACHINE% /def:fftw\libfftw3f-3.def
