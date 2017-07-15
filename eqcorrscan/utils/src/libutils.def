@@ -1,0 +1,6 @@
+LIBRARY libutils.dll
+EXPORTS
+    xcorr_fftw_1d
+    xcorr
+    multi_corr
+    multi_normalise
