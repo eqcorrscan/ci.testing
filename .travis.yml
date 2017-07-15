@@ -1,5 +1,10 @@
 language: c
 
+addons:
+  apt:
+    packages:
+      libfftw3-dev
+
 matrix:
   include:
     - os: linux
