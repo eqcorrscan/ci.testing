@@ -288,7 +288,7 @@ int xcorr(float *signala, int a_len, float *signalb, int b_len, float *ccc){
 
 int multi_corr(float *templates, int template_len, int n_templates, float *image, int image_len, float *ccc){
 	int i;
-	#pragma omp parallel for
+//	#pragma omp parallel for
 	for (i = 0; i < n_templates; ++i){
 		xcorr(&templates[template_len * i], template_len, image, image_len, &ccc[(image_len - template_len) * i]);
 	}
