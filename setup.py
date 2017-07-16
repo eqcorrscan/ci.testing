@@ -50,17 +50,17 @@ else:
     IS_MSVC = False
 
 if IS_MSVC:
-    # extra_args = ['/openmp', '/DFFTW_DLL']
-    extra_args = []
-    extra_links = []
-    libs = []
-    lib_dirs = []
-    inc_dirs = []
-    # extra_links = ["/DFFTW_DLL"]
-    # libs = ['libfftw3-3']
-    # lib_dirs = [os.path.join(os.getcwd(), 'fftw'),
-    #             os.path.join(sys.prefix, 'bin')]
-    # inc_dirs = [os.path.join(os.getcwd(), 'fftw')]
+    # extra_args = []
+    # extra_links = []
+    # libs = []
+    # lib_dirs = []
+    # inc_dirs = []
+    extra_args = ['/openmp', '/DFFTW_DLL']
+    extra_links = ["/DFFTW_DLL"]
+    libs = ['libfftw3-3']
+    lib_dirs = [os.path.join(os.getcwd(), 'fftw'),
+                os.path.join(sys.prefix, 'bin')]
+    inc_dirs = [os.path.join(os.getcwd(), 'fftw')]
 else:
     extra_args = ['-fopenmp', '-ftree-vectorize', '-msse2']
     extra_links = ['-lm', '-lgomp']
