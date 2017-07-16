@@ -157,6 +157,10 @@ class custom_build_ext(build_ext):
 
         if compiler == 'msvc':
             # Add msvc specific hacks
+            def _get_export_symbols(self, ext):
+                return ext.export_symbols
+
+            build_ext.get_export_symbols = _get_export_symbols
 
             if (sys.version_info.major, sys.version_info.minor) < (3, 3):
                 # The check above is a nasty hack. We're using the python
