@@ -76,8 +76,9 @@ install:
 build: false
 
 test_script:
-  - "%CMD_IN_ENV% python setup.py develop"
-  - "%CMD_IN_ENV% python eqcorrscan/tests/correlate_test.py"
+  - "%CMD_IN_ENV% python setup.py install"
+  - "cd .."
+  - "%CMD_IN_ENV% python ci-testing/eqcorrscan/tests/correlate_test.py"
 
 after_test:
   #  - "coverage combine"
