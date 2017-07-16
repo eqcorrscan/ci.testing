@@ -56,6 +56,7 @@ def _load_cdll(name):
         os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'fftw')
     print(fftw_path)
     os.environ["PATH"] = fftw_path + ':' + os.environ["PATH"]
+    print(os.environ["PATH"])
     print(libpath)
     try:
         cdll = ctypes.CDLL(str(libpath))
