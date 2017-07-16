@@ -77,7 +77,10 @@ build: false
 
 test_script:
   - "%CMD_IN_ENV% python setup.py install"
+  - "pwd"
   - "cd .."
+  - "ls"
+  - "pwd"
   - "%CMD_IN_ENV% python ci-testing/eqcorrscan/tests/correlate_test.py"
 
 after_test:
