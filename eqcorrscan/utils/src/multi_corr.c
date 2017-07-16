@@ -35,6 +35,7 @@ int multi_corr (float *templates, int template_len, int n_templates, float *imag
 
 int multi_normalise(float *ccc, int ccc_len, float *image, float *norm_sum, int template_len, int n);
 
+// Functions
 int run_std_mean(int a_len, float *signalb, int b_len, float *run_std, float *run_mean){
     int i;
 	double sum = 0.0, mean, stdev, old_mean, var=0.0, new_samp, old_samp;
@@ -65,7 +66,6 @@ int run_std_mean(int a_len, float *signalb, int b_len, float *run_std, float *ru
 	return 0;
 }
 
-// Functions
 int normxcorr_fftw_1d(float *signala, int a_len, float *signalb, int b_len,
 				  float *ncc, int N){
   /*
@@ -86,7 +86,6 @@ int normxcorr_fftw_1d(float *signala, int a_len, float *signalb, int b_len,
 }
 
 
-// Functions
 int xcorr_fftw_1d(float *signala, int a_len, float *signalb, int b_len,
 				  float *ncc, int N){
   /*
