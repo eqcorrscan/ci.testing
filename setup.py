@@ -98,7 +98,7 @@ def get_extensions():
         'include_dirs': get_include_dirs(),
         'library_dirs': get_library_dirs()}
 
-    sources = [os.path.join(os.getcwd(), 'eqcorrscan', 'utils', 'src',
+    sources = [os.path.join(os.getcwd(), 'eqcorrscan', 'lib',
                             'multi_corr.c')]
     exp_symbols = export_symbols("eqcorrscan/utils/src/libutils.def")
 
@@ -157,6 +157,8 @@ class custom_build_ext(build_ext):
 
         if compiler == 'msvc':
             # Add msvc specific hacks
+
+            # Sort linking issues with init exported symbols
             def _get_export_symbols(self, ext):
                 return ext.export_symbols
 
