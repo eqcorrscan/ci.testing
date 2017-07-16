@@ -82,6 +82,10 @@ def get_libraries():
 
     return libraries
 
+def export_symbols(*path):
+    lines = open(os.path.join(*path), 'r').readlines()[2:]
+    return [s.strip() for s in lines if s.strip() != '']
+
 def get_extensions():
     from distutils.extension import Extension
     from pkg_resources import get_build_platform
@@ -96,6 +100,7 @@ def get_extensions():
 
     sources = [os.path.join(os.getcwd(), 'eqcorrscan', 'utils', 'src',
                             'multi_corr.c')]
+    exp_symbols = export_symbols("eqcorrscan/utils/src/libutils.def")
 
     if get_build_platform() not in ('win32', 'win-amd64'):
         extra_link_args = ['-lm', '-lgomp']
@@ -119,11 +124,13 @@ def get_extensions():
         common_extension_args['extra_link_args'] = extra_link_args
         common_extension_args['libraries'] = []
         common_extension_args['extra_compile_args'] = extra_compile_args
+        common_extension_args['export_symbols'] = exp_symbols
     else:
         # otherwise we use dynamic libraries
         common_extension_args['extra_link_args'] = extra_link_args
         common_extension_args['libraries'] = libraries
         common_extension_args['extra_compile_args'] = extra_compile_args
+        common_extension_args['export_symbols'] = exp_symbols
 
     ext_modules = [
         Extension('eqcorrscan.lib.libutils', sources=sources,
