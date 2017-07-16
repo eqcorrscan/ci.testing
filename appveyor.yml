@@ -69,6 +69,7 @@ install:
   - "conda list"
   - "cp misc/appveyor/fftw3.h fftw/fftw3.h"
   - "%CMD_IN_ENV% python setup.py build_ext --inplace"
+  - "cp fftw/*.dll eqcorrscan/lib/."
   - "%CMD_IN_ENV% dumpbin.exe -dependents eqcorrscan/lib/libutils.pyd"
 
 # Not a .NET project
