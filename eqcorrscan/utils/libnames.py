@@ -48,7 +48,6 @@ def _load_cdll(name):
     :param name: Name of the library to load (e.g. 'mseed').
     :rtype: :class:`ctypes.CDLL`
     """
-    import sys
     # our custom defined part of the extension file name
     libname = _get_lib_name(name)
     libdir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'lib')
@@ -56,7 +55,7 @@ def _load_cdll(name):
     fftw_path = os.path.join(
         os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'fftw')
     print(fftw_path)
-    sys.path.insert(0, fftw_path)
+    os.environ["PATH"] = fftw_path + ':' + os.environ["PATH"]
     print(libpath)
     try:
         cdll = ctypes.CDLL(str(libpath))
