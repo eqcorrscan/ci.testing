@@ -53,7 +53,7 @@ install:
   - "conda install -q --yes pip numpy>=1.12.0 scipy>=0.18 matplotlib mock flake8 pyflakes=0.9.0 cython h5py pyproj bottleneck"
   # additional dependecies
   - "pip install pyimgur"
-
+  - "conda install fftw"
     # Obspy 1.0.3 conda clashes with numpy >= 1.12...(because of matplotlib 1.5.*?) install via git until 1.1.0
   #  - "mkdir obspy && cd obspy && git init"
   #  - "git remote add -f origin https://github.com/obspy/obspy.git"
@@ -77,13 +77,6 @@ build: false
 
 test_script:
   - "%CMD_IN_ENV% python setup.py install"
-  - "pwd"
-  - "ls"
-  - "rm -r build"
-  - "rm -r dist"
-  - "rm -r eqcorrscan/core"
-  - "rm -r eqcorrscan/utils"
-  - "rm -r eqcorrscan/lib"
   - "%CMD_IN_ENV% python eqcorrscan/tests/correlate_test.py"
 
 after_test:
