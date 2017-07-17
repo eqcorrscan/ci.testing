@@ -57,9 +57,6 @@ def get_include_dirs():
                     numpy.get_include(),
                     os.path.join(sys.prefix, 'include')]
 
-    if get_build_platform() in ('win32', 'win-amd64'):
-        include_dirs.append(os.path.join(os.getcwd(), 'include', 'win'))
-
     if get_build_platform().startswith('freebsd'):
         include_dirs.append('/usr/local/include')
 

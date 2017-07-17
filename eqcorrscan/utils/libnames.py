@@ -48,11 +48,17 @@ def _load_cdll(name):
     :param name: Name of the library to load (e.g. 'mseed').
     :rtype: :class:`ctypes.CDLL`
     """
+    from pkg_resources import get_build_platform
     # our custom defined part of the extension file name
     libname = _get_lib_name(name)
     libdir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'lib')
     libpath = os.path.join(libdir, libname)
     print(libpath)
+    if get_build_platform() in ('win32', 'win-and64') and name == 'libutils':
+        try:
+            fftw = ctypes.CDLL(str(os.path.join(libdir, 'libfftw3-3.dll')))
+        except:
+            pass
     try:
         cdll = ctypes.CDLL(str(libpath))
     except Exception as e:
