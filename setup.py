@@ -1,10 +1,10 @@
 try:
     # use setuptools if we can
-    from setuptools import setup, Command, Extension, find_packages
+    from setuptools import setup, Command, Extension
     from setuptools.command.build_ext import build_ext
     using_setuptools = True
 except ImportError:
-    from distutils.core import setup, Command, Extension, find_packages
+    from distutils.core import setup, Command, Extension
     from distutils.command.build_ext import build_ext
     using_setuptools = False
 
@@ -35,9 +35,18 @@ def get_package_data():
 
     if get_build_platform() in ('win32', 'win-amd64'):
         package_data['eqcorrscan.lib'] = [
-            'libfftw3-3.dll', 'libfftw3l-3.dll', 'libfftw3f-3.dll']
-
+            'libfftw3-3.dll', 'libfftw3f-3.dll', 'libfftw3l-3.dll']
+        
     return package_data
+
+def get_package_dir():
+    from pkg_resources import get_build_platform
+
+    package_dir = {}
+    if get_build_platform() in ('win32', 'win-amd64'):
+        package_dir['eqcorrscan.lib'] = os.path.join('eqcorrscan', 'lib')
+
+    return package_dir
 
 def get_include_dirs():
     import numpy
@@ -134,7 +143,6 @@ def get_extensions():
         common_extension_args['libraries'] = libraries
         common_extension_args['extra_compile_args'] = extra_compile_args
         common_extension_args['export_symbols'] = exp_symbols
-
     ext_modules = [
         Extension('eqcorrscan.lib.libutils', sources=sources,
                   **common_extension_args)]
@@ -304,9 +312,6 @@ def setup_package():
             'Programming Language :: Python :: 3.4',
         ],
         'keywords': 'earthquake correlation detection match-filter',
-        'packages': find_packages(exclude=[
-            'docs', 'tests', 'test_data', 'grid', 'detections', 'templates',
-            'stack_templates', 'par', '.git']),
         'scripts': scriptfiles,
         'install_requires': install_requires,
         'setup_requires': ['pytest-runner'],
@@ -326,9 +331,11 @@ def setup_package():
         # For these actions, NumPy is not required.
         pass
     else:
+        setup_args['packages'] = ['eqcorrscan', 'eqcorrscan.utils',
+                                  'eqcorrscan.core', 'eqcorrscan.lib']
         setup_args['ext_modules'] = get_extensions()
         setup_args['package_data'] = get_package_data()
-
+        setup_args['package_dir'] = get_package_dir()
     setup(**setup_args)
 
 if __name__ == '__main__':
