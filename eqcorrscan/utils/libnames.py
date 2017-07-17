@@ -57,7 +57,10 @@ def _load_cdll(name):
     if get_build_platform() in ('win32', 'win-and64') and name == 'libutils':
         try:
             fftw = ctypes.CDLL(str(os.path.join(libdir, 'libfftw3-3.dll')))
-        except:
+            print('Loaded static fftw')
+        except Exception as e:
+            print('Failed to import statis fftw')
+            print(e)
             pass
     try:
         cdll = ctypes.CDLL(str(libpath))
